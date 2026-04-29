@@ -1,5 +1,9 @@
 import { createClient } from "@/lib/supabase/client";
 import OpenAI from "openai";
+import type { Database } from "@/lib/supabase/database.types";
+import type { HealthAssessment, HealthReading } from "@/lib/types";
+
+type HealthConversation = Database["public"]["Tables"]["health_conversations"]["Row"];
 
 const client = new OpenAI({
   apiKey: process.env.MOONSHOT_API_KEY ?? process.env.OPENAI_API_KEY,
@@ -21,9 +25,25 @@ export async function POST(request: Request) {
 
   // Get assessment + reading + conversation
   const [assessmentRes, readingRes, convRes] = await Promise.all([
-    supabase.from("health_assessments").select("*").eq("id", assessmentId).eq("user_id", user.id).single(),
-    supabase.from("health_readings_cache").select("reading").eq("assessment_id", assessmentId).single(),
-    supabase.from("health_conversations").select("*").eq("assessment_id", assessmentId).single(),
+    supabase
+      .from("health_assessments")
+      .select("*")
+      .eq("id", assessmentId)
+      .eq("user_id", user.id)
+      .single()
+      .overrideTypes<HealthAssessment, { merge: false }>(),
+    supabase
+      .from("health_readings_cache")
+      .select("reading")
+      .eq("assessment_id", assessmentId)
+      .single()
+      .overrideTypes<{ reading: HealthReading }, { merge: false }>(),
+    supabase
+      .from("health_conversations")
+      .select("*")
+      .eq("assessment_id", assessmentId)
+      .single()
+      .overrideTypes<HealthConversation, { merge: false }>(),
   ]);
 
   if (!assessmentRes.data) {

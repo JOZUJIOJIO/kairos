@@ -1,6 +1,9 @@
 import { createClient } from "./supabase/client";
 import type { HealthAssessment, HealthReading, ConstitutionResult } from "./types";
 import type { QuizAnswer } from "./types";
+import type { Database } from "./supabase/database.types";
+
+type HealthConversation = Database["public"]["Tables"]["health_conversations"]["Row"];
 
 const supabase = () => createClient();
 
@@ -23,7 +26,8 @@ export async function saveAssessment(
       bazi_chart_hash: baziChartHash,
     })
     .select("id")
-    .single();
+    .single()
+    .overrideTypes<{ id: string }, { merge: false }>();
 
   if (error) {
     console.error("saveAssessment error:", error);
@@ -37,7 +41,8 @@ export async function getAssessment(id: string): Promise<HealthAssessment | null
     .from("health_assessments")
     .select("*")
     .eq("id", id)
-    .single();
+    .single()
+    .overrideTypes<HealthAssessment, { merge: false }>();
 
   if (error) return null;
   return data;
@@ -48,7 +53,8 @@ export async function getCachedReading(assessmentId: string): Promise<HealthRead
     .from("health_readings_cache")
     .select("reading")
     .eq("assessment_id", assessmentId)
-    .single();
+    .single()
+    .overrideTypes<{ reading: HealthReading }, { merge: false }>();
 
   if (error) return null;
   return data.reading as HealthReading;
@@ -65,7 +71,8 @@ export async function getConversation(assessmentId: string) {
     .from("health_conversations")
     .select("*")
     .eq("assessment_id", assessmentId)
-    .single();
+    .single()
+    .overrideTypes<HealthConversation, { merge: false }>();
 
   if (error) return null;
   return data;
@@ -100,7 +107,8 @@ export async function getUserAssessments(userId: string): Promise<HealthAssessme
     .from("health_assessments")
     .select("*")
     .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .overrideTypes<HealthAssessment[], { merge: false }>();
 
   if (error) return [];
   return data ?? [];

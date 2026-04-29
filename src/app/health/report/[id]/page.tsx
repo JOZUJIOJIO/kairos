@@ -44,7 +44,8 @@ export default function HealthReportPage({ params }: { params: Promise<{ id: str
         .select("*")
         .eq("id", id)
         .eq("user_id", user!.id)
-        .single();
+        .single()
+        .overrideTypes<HealthAssessment, { merge: false }>();
 
       if (!assess) {
         setError("Report not found");

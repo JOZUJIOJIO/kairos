@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/client";
 import OpenAI from "openai";
+import type { HealthAssessment, HealthReading } from "@/lib/types";
 
 const client = new OpenAI({
   apiKey: process.env.MOONSHOT_API_KEY ?? process.env.OPENAI_API_KEY,
@@ -25,7 +26,8 @@ export async function POST(request: Request) {
     .from("health_readings_cache")
     .select("reading")
     .eq("assessment_id", assessmentId)
-    .single();
+    .single()
+    .overrideTypes<{ reading: HealthReading }, { merge: false }>();
 
   if (cached?.reading) {
     return NextResponse.json(cached.reading);
@@ -58,7 +60,8 @@ export async function POST(request: Request) {
     .select("*")
     .eq("id", assessmentId)
     .eq("user_id", user.id)
-    .single();
+    .single()
+    .overrideTypes<HealthAssessment, { merge: false }>();
 
   if (!assessment) {
     return NextResponse.json({ error: "Assessment not found" }, { status: 404 });

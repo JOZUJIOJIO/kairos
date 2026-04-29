@@ -1,4 +1,7 @@
 import { createBrowserClient } from "@supabase/ssr";
+import type { Database } from "./database.types";
+
+type BrowserSupabaseClient = ReturnType<typeof createBrowserClient<Database>>;
 
 function isConfigured() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -6,7 +9,7 @@ function isConfigured() {
   return !!(url && key && url !== "your-supabase-url" && !url.includes("placeholder") && url.startsWith("https://"));
 }
 
-let client: ReturnType<typeof createBrowserClient> | null = null;
+let client: BrowserSupabaseClient | null = null;
 let configured: boolean | null = null;
 
 export function isSupabaseConfigured(): boolean {
@@ -33,10 +36,10 @@ export function createClient() {
         signOut: () => Promise.resolve(),
       },
     };
-    return dummy as unknown as ReturnType<typeof createBrowserClient>;
+    return dummy as unknown as BrowserSupabaseClient;
   }
 
-  client = createBrowserClient(
+  client = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );

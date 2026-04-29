@@ -1,6 +1,21 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
-export interface Database {
+type FiveElementsScore = { 木: number; 火: number; 土: number; 金: number; 水: number };
+type HealthReadingJson = {
+  organHealth: { organ: string; element: string; status: "strong" | "balanced" | "weak" | "excess"; description: string }[];
+  dietTherapy: { recommended: { name: string; nameLocal: string }[]; avoid: { name: string; nameLocal: string }[] };
+  seasonalWellness: { season: string; advice: string }[];
+  lifestyle: string;
+  warnings: string[];
+  summary: string;
+};
+type HealthConversationMessage = {
+  role: string;
+  content: string;
+  ts?: number;
+};
+
+export type Database = {
   public: {
     Tables: {
       profiles: {
@@ -30,6 +45,7 @@ export interface Database {
           referred_by?: string | null;
           free_readings?: number;
         };
+        Relationships: [];
       };
       orders: {
         Row: {
@@ -77,6 +93,7 @@ export interface Database {
           reading_data?: Json | null;
           paid_at?: string | null;
         };
+        Relationships: [];
       };
       readings_cache: {
         Row: {
@@ -100,11 +117,12 @@ export interface Database {
           reading?: Json;
           tier?: string;
         };
+        Relationships: [];
       };
       subscriptions: {
         Row: {
           id: string;
-          user_id: string;
+          user_id: string | null;
           stripe_customer_id: string;
           stripe_subscription_id: string;
           plan: string;
@@ -117,7 +135,7 @@ export interface Database {
         };
         Insert: {
           id?: string;
-          user_id: string;
+          user_id?: string | null;
           stripe_customer_id: string;
           stripe_subscription_id: string;
           plan?: string;
@@ -127,7 +145,7 @@ export interface Database {
           cancel_at_period_end?: boolean;
         };
         Update: {
-          user_id?: string;
+          user_id?: string | null;
           stripe_customer_id?: string;
           stripe_subscription_id?: string;
           plan?: string;
@@ -137,6 +155,7 @@ export interface Database {
           cancel_at_period_end?: boolean;
           updated_at?: string;
         };
+        Relationships: [];
       };
       referrals: {
         Row: {
@@ -161,6 +180,7 @@ export interface Database {
           reward_given?: boolean;
           converted_at?: string | null;
         };
+        Relationships: [];
       };
       horoscope_cache: {
         Row: {
@@ -184,63 +204,66 @@ export interface Database {
           date?: string;
           data?: Json;
         };
+        Relationships: [];
       };
       health_assessments: {
         Row: {
           id: string;
           user_id: string;
-          answers: Json;
+          answers: number[];
           constitution_type: string;
           constitution_subtype: string;
           secondary_type: string | null;
-          five_elements_score: Json;
-          nine_constitutions_score: Json;
+          five_elements_score: FiveElementsScore;
+          nine_constitutions_score: Record<string, number>;
           bazi_chart_hash: string | null;
           created_at: string;
         };
         Insert: {
           id?: string;
           user_id: string;
-          answers: Json;
+          answers: number[];
           constitution_type: string;
           constitution_subtype: string;
           secondary_type?: string | null;
-          five_elements_score: Json;
-          nine_constitutions_score: Json;
+          five_elements_score: FiveElementsScore;
+          nine_constitutions_score: Record<string, number>;
           bazi_chart_hash?: string | null;
         };
         Update: {
-          answers?: Json;
+          answers?: number[];
           constitution_type?: string;
           constitution_subtype?: string;
           secondary_type?: string | null;
-          five_elements_score?: Json;
-          nine_constitutions_score?: Json;
+          five_elements_score?: FiveElementsScore;
+          nine_constitutions_score?: Record<string, number>;
           bazi_chart_hash?: string | null;
         };
+        Relationships: [];
       };
       health_readings_cache: {
         Row: {
           id: string;
           assessment_id: string;
-          reading: Json;
+          reading: HealthReadingJson;
           created_at: string;
         };
         Insert: {
           id?: string;
           assessment_id: string;
-          reading: Json;
+          reading: HealthReadingJson;
         };
         Update: {
-          reading?: Json;
+          reading?: HealthReadingJson;
         };
+        Relationships: [];
       };
       health_conversations: {
         Row: {
           id: string;
           assessment_id: string;
           user_id: string;
-          messages: Json;
+          messages: HealthConversationMessage[];
           message_count: number;
           created_at: string;
           updated_at: string;
@@ -249,15 +272,23 @@ export interface Database {
           id?: string;
           assessment_id: string;
           user_id: string;
-          messages?: Json;
+          messages?: HealthConversationMessage[];
           message_count?: number;
         };
         Update: {
-          messages?: Json;
+          messages?: HealthConversationMessage[];
           message_count?: number;
           updated_at?: string;
         };
+        Relationships: [];
+      };
+    };
+    Views: Record<string, never>;
+    Functions: {
+      increment_free_readings: {
+        Args: { user_id: string };
+        Returns: void;
       };
     };
   };
-}
+};
