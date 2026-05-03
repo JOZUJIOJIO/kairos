@@ -447,11 +447,11 @@ function LuckyCompass({ chart }: { chart: BaziChart }) {
 
         <div className="flex-1 space-y-2">
           <div>
-            <div className="text-[10px] text-amber-200/30 mb-1">🧭 吉利方位</div>
+            <div className="text-[10px] text-amber-200/30 mb-1">🧭 参考方位</div>
             <div className="text-xs text-amber-100/60">{rec.directions}</div>
           </div>
           <div>
-            <div className="text-[10px] text-amber-200/30 mb-1">🔢 幸运数字</div>
+            <div className="text-[10px] text-amber-200/30 mb-1">🔢 参考数字</div>
             <div className="flex gap-2">
               {nums.map(n => (
                 <span key={n} className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
@@ -466,7 +466,7 @@ function LuckyCompass({ chart }: { chart: BaziChart }) {
 
       {/* Color palette */}
       <div>
-        <div className="text-[10px] text-amber-200/30 mb-1.5">🎨 开运色板</div>
+        <div className="text-[10px] text-amber-200/30 mb-1.5">🎨 参考色板</div>
         <div className="flex gap-1.5">
           {palette.map((color, i) => (
             <div key={i} className="flex-1 h-6 rounded-md" style={{ backgroundColor: color, opacity: 0.7 + i * 0.05 }} />
@@ -477,7 +477,7 @@ function LuckyCompass({ chart }: { chart: BaziChart }) {
 
       {/* Industries */}
       <div>
-        <div className="text-[10px] text-amber-200/30 mb-1">💼 旺运行业</div>
+        <div className="text-[10px] text-amber-200/30 mb-1">💼 适配行业</div>
         <div className="text-xs text-amber-100/50">{rec.industries}</div>
       </div>
     </div>

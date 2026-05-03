@@ -14,6 +14,7 @@ declare global {
       start_param?: string;
       user?: TelegramWebAppUser;
     };
+    version?: string;
     colorScheme?: "light" | "dark";
     themeParams?: Record<string, string>;
     viewportHeight?: number;
@@ -26,6 +27,7 @@ declare global {
     disableClosingConfirmation?: () => void;
     setHeaderColor?: (color: string) => void;
     setBackgroundColor?: (color: string) => void;
+    isVersionAtLeast?: (version: string) => boolean;
     openInvoice?: (
       url: string,
       callback?: (status: "paid" | "cancelled" | "failed" | "pending") => void

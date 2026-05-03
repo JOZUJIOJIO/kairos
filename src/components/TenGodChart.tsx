@@ -5,16 +5,15 @@ import type { BaziChart } from "@/lib/bazi";
 import { STEM_ELEMENTS } from "@/lib/bazi";
 
 /**
- * 十神结构分布图 + 性格倾向标签
- * Groups: 比劫 / 食伤 / 资源 / 官杀 / 印星
+ * Five structure groups + personality tendency labels.
  */
 
 const GOD_GROUPS = [
-  { name: "比劫", gods: ["比肩", "劫财"], color: "#8b5cf6", emoji: "🤝", desc: "自我/社交力量", archetype: "独立自主型" },
-  { name: "食伤", gods: ["食神", "伤官"], color: "#ec4899", emoji: "✨", desc: "才华/表达力量", archetype: "创意才华型" },
-  { name: "资源", gods: ["正财", "偏财"], color: "#f59e0b", emoji: "◆", desc: "资源/务实力量", archetype: "资源管理型" },
-  { name: "官杀", gods: ["正官", "七杀"], color: "#ef4444", emoji: "◇", desc: "责任/规则力量", archetype: "责任管理型" },
-  { name: "印星", gods: ["正印", "偏印"], color: "#3b82f6", emoji: "✦", desc: "学习/支持力量", archetype: "智慧学习型" },
+  { name: "自我协作", gods: ["比肩", "劫财"], color: "#8b5cf6", emoji: "🤝", desc: "独立/协作力量", archetype: "独立自主型" },
+  { name: "表达创造", gods: ["食神", "伤官"], color: "#ec4899", emoji: "✨", desc: "表达/创造力量", archetype: "创意才华型" },
+  { name: "资源管理", gods: ["正财", "偏财"], color: "#f59e0b", emoji: "◆", desc: "资源/务实力量", archetype: "资源管理型" },
+  { name: "规则挑战", gods: ["正官", "七杀"], color: "#ef4444", emoji: "◇", desc: "责任/规则力量", archetype: "责任管理型" },
+  { name: "学习洞察", gods: ["正印", "偏印"], color: "#3b82f6", emoji: "✦", desc: "学习/洞察力量", archetype: "智慧学习型" },
 ];
 
 const GOD_DISPLAY: Record<string, string> = {
@@ -116,7 +115,7 @@ export default function TenGodChart({ chart }: { chart: BaziChart }) {
           <span className="text-sm font-bold text-amber-200">{dominantGroup.archetype}</span>
         </div>
         <p className="text-[10px] text-amber-200/25 mt-2">
-          基于结构分布 · {dominantGroup.name}力量最强
+          基于结构分布 · {dominantGroup.name}最强
         </p>
       </div>
 

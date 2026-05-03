@@ -119,10 +119,10 @@ export default function PersonalityPage({ params }: { params: Promise<{ stem: st
           {/* Lucky guidance */}
           {elRec && (
             <div className="bg-white/[0.03] border border-amber-400/10 rounded-2xl p-6">
-              <h2 className="text-sm font-bold text-amber-200 mb-3">{isChinese ? "🍀 开运建议" : "🍀 Lucky Guidance"}</h2>
+              <h2 className="text-sm font-bold text-amber-200 mb-3">{isChinese ? "🍀 行动建议" : "🍀 Action Guidance"}</h2>
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-white/[0.02] rounded-lg p-3 border border-white/5">
-                  <div className="text-[10px] text-amber-400/40 mb-1">🎨 {isChinese ? "幸运色" : "Colors"}</div>
+                  <div className="text-[10px] text-amber-400/60 mb-1">🎨 {isChinese ? "参考色" : "Colors"}</div>
                   <div className="text-xs text-amber-100/60">{isChinese ? elRec.colors : elRec.colorsEn}</div>
                 </div>
                 <div className="bg-white/[0.02] rounded-lg p-3 border border-white/5">

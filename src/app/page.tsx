@@ -10,7 +10,6 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import StarfieldCanvas from "@/components/StarfieldCanvas";
 import CloudCanvas from "@/components/CloudCanvas";
 import TaijiSvg from "@/components/TaijiSvg";
-import ThemeToggle from "@/components/ThemeToggle";
 import BrandMark from "@/components/BrandMark";
 import { useAuth } from "@/lib/supabase/auth-context";
 import { calculateBazi, ELEMENT_EMOJI, ELEMENT_COLORS, type BaziChart } from "@/lib/bazi";
@@ -118,17 +117,16 @@ export default function Home() {
         <nav className="flex items-center justify-between px-6 lg:px-12 py-4 animate-riseIn" style={{ animationDelay: "0.1s" }}>
           <Link href="/" className="flex items-center gap-2">
             <BrandMark size="sm" />
-            <span className={`text-lg font-light tracking-[0.15em] ${theme === "cosmic" ? "text-[#F2F0EB]/72" : "text-[#1a1520]/62"}`}>
+            <span className="text-lg font-light tracking-[0.15em] text-[#F2F0EB]/86">
               Kairós
             </span>
           </Link>
           <div className="flex items-center gap-4">
             {user && (
-              <Link href="/profile" className={`text-sm btn-haptic transition-colors ${tk.text3} hover:${tk.text2}`}>
+              <Link href="/profile" className={`text-sm btn-haptic transition-colors ${tk.text3} hover:text-amber-100`}>
                 {locale === "zh" ? "我的" : "Profile"}
               </Link>
             )}
-            <ThemeToggle />
             <LanguageSwitcher />
           </div>
         </nav>

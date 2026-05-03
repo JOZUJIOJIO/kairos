@@ -20,6 +20,7 @@ export default function TelegramMiniAppBridge() {
   useEffect(() => {
     const webApp = window.Telegram?.WebApp;
     if (!webApp) return;
+    const isVersionAtLeast = (version: string) => webApp.isVersionAtLeast?.(version) ?? true;
 
     setIsTelegram(true);
     document.documentElement.classList.add("telegram-miniapp");
@@ -34,9 +35,13 @@ export default function TelegramMiniAppBridge() {
     webApp.onEvent?.("viewportChanged", applyTelegramViewport);
     webApp.ready();
     webApp.expand();
-    webApp.enableClosingConfirmation?.();
-    webApp.setHeaderColor?.("#090712");
-    webApp.setBackgroundColor?.("#060410");
+    if (isVersionAtLeast("6.2")) {
+      webApp.enableClosingConfirmation?.();
+    }
+    if (isVersionAtLeast("6.1")) {
+      webApp.setHeaderColor?.("#090712");
+      webApp.setBackgroundColor?.("#060410");
+    }
 
     const currentParams = new URLSearchParams(window.location.search);
     const startParam = webApp.initDataUnsafe?.start_param || currentParams.get("tgWebAppStartParam") || currentParams.get("startapp") || "";
@@ -77,6 +82,9 @@ export default function TelegramMiniAppBridge() {
   useEffect(() => {
     const webApp = window.Telegram?.WebApp;
     if (!webApp || !isTelegram) return;
+    const isVersionAtLeast = (version: string) => webApp.isVersionAtLeast?.(version) ?? true;
+    if (!isVersionAtLeast("6.1")) return;
+
     const showBack = pathname !== "/" && pathname !== "/tg";
     if (showBack) {
       const goBack = () => router.back();

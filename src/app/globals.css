@@ -608,3 +608,43 @@ body {
   animation: ripple 0.5s ease-out forwards;
   pointer-events: none;
 }
+
+/* Readability floor: keep small labels legible on mobile and inside Telegram. */
+.text-amber-200\/15,
+.text-amber-200\/20,
+.text-amber-200\/25,
+.text-amber-200\/30,
+.text-amber-200\/35,
+.text-amber-200\/40,
+.text-amber-100\/20,
+.text-amber-100\/25,
+.text-amber-100\/30,
+.text-amber-50\/20,
+.text-amber-50\/25,
+.text-amber-50\/30 {
+  color: rgba(255, 248, 234, 0.58) !important;
+}
+
+.text-purple-200\/20,
+.text-purple-200\/25,
+.text-purple-200\/30,
+.text-purple-200\/40 {
+  color: rgba(233, 213, 255, 0.64) !important;
+}
+
+.text-emerald-200\/20,
+.text-emerald-200\/25,
+.text-emerald-200\/30,
+.text-emerald-200\/40,
+.text-emerald-50\/20,
+.text-emerald-50\/25,
+.text-emerald-50\/30 {
+  color: rgba(209, 250, 229, 0.64) !important;
+}
+
+.text-red-400\/20,
+.text-red-400\/25,
+.text-red-400\/30,
+.text-red-400\/40 {
+  color: rgba(248, 113, 113, 0.68) !important;
+}

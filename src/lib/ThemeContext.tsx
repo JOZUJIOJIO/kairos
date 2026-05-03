@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, type ReactNode } from "react";
 
 type Theme = "cosmic" | "cloud";
 
@@ -15,21 +15,18 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("cosmic");
-
   useEffect(() => {
-    const saved = localStorage.getItem("kairos-theme") as Theme | null;
-    if (saved === "cloud" || saved === "cosmic") setTheme(saved);
+    localStorage.setItem("kairos-theme", "cosmic");
+    document.documentElement.dataset.kairosTheme = "cosmic";
+    document.documentElement.style.colorScheme = "dark";
   }, []);
 
-  const toggle = () => {
-    const next = theme === "cosmic" ? "cloud" : "cosmic";
-    setTheme(next);
-    localStorage.setItem("kairos-theme", next);
-  };
+  const toggle = useCallback(() => {
+    localStorage.setItem("kairos-theme", "cosmic");
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggle }}>
+    <ThemeContext.Provider value={{ theme: "cosmic", toggle }}>
       {children}
     </ThemeContext.Provider>
   );
