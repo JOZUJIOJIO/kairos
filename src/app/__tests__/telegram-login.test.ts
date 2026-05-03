@@ -12,4 +12,10 @@ describe("Telegram login experience", () => {
     expect(page).toContain("/api/telegram/auth");
     expect(page).toContain("authSurface === \"web\"");
   });
+
+  it("keeps Telegram login redirects on Mini App-safe routes", () => {
+    const page = readFileSync(join(root, "src/app/login/page.tsx"), "utf8");
+
+    expect(page).toContain("resolveTelegramRedirectPath(redirectTo)");
+  });
 });

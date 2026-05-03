@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useTheme } from "@/lib/ThemeContext";
 import { themeTokens } from "@/lib/theme-tokens";
 import { PageArtworkBackdrop } from "@/components/PageArtwork";
+import { resolveTelegramRedirectPath } from "@/lib/telegram/navigation";
 
 type AuthSurface = "checking" | "telegram" | "web";
 
@@ -86,7 +87,7 @@ function LoginContent() {
         localStorage.setItem("kairos_telegram_session", JSON.stringify(session));
         window.dispatchEvent(new CustomEvent("kairos:telegram-session", { detail: session }));
         webApp.HapticFeedback?.notificationOccurred?.("success");
-        if (!cancelled) router.replace(redirectTo);
+        if (!cancelled) router.replace(resolveTelegramRedirectPath(redirectTo));
       } catch (err) {
         webApp.HapticFeedback?.notificationOccurred?.("error");
         const message = err instanceof Error ? err.message : "Telegram auth failed";
