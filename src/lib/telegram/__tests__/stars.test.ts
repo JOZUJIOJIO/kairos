@@ -16,7 +16,7 @@ describe("Telegram Stars invoices", () => {
     expect(invoice.currency).toBe("XTR");
     expect(invoice.provider_token).toBe("");
     expect(invoice.payload).toBe("stars_abc123");
-    expect(invoice.prices).toEqual([{ label: "Kairós Pro Insight", amount: 499 }]);
+    expect(invoice.prices).toEqual([{ label: "Kairós Pro Insight", amount: 500 }]);
     expect(invoice.title).toContain("Kairós");
     expect(invoice.payload.length).toBeLessThanOrEqual(128);
   });

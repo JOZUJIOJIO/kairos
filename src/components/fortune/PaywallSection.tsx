@@ -1,6 +1,7 @@
 "use client";
 
 import type { User } from "@supabase/supabase-js";
+import { formatStarsPrice, formatUsdPrice } from "@/lib/pricing";
 
 export interface PaywallSectionProps {
   user: User | null;
@@ -171,7 +172,7 @@ export function PaywallSection({
             {/* Pro */}
             <div className="bg-amber-900/15 border border-amber-500/20 rounded-xl p-3.5 text-center">
               <div className="text-[10px] text-amber-400/50 mb-1">⭐ {isChinese ? "专业版" : "Pro"}</div>
-              <div className="text-2xl font-bold text-amber-300">{isTelegramMiniApp ? "499 ★" : "$9.90"}</div>
+              <div className="text-2xl font-bold text-amber-300">{isTelegramMiniApp ? formatStarsPrice("fortune_pro") : formatUsdPrice("fortune_pro")}</div>
               <p className="text-amber-200/25 text-[10px] mt-1 mb-3">{isChinese ? "6维AI深度解读" : "6-dimension AI reading"}</p>
               <button
                 onClick={() => handleStripeCheckout("pro")}
@@ -185,7 +186,7 @@ export function PaywallSection({
             <div className="bg-purple-900/15 border border-purple-400/25 rounded-xl p-3.5 text-center relative overflow-hidden">
               <div className="absolute top-0 right-0 bg-purple-500/80 text-white text-[8px] px-2 py-0.5 rounded-bl-lg font-bold">{isChinese ? "推荐" : "BEST"}</div>
               <div className="text-[10px] text-purple-300/60 mb-1">👑 {isChinese ? "大师版" : "Master"}</div>
-              <div className="text-2xl font-bold text-purple-200">{isTelegramMiniApp ? "1499 ★" : "$29.90"}</div>
+              <div className="text-2xl font-bold text-purple-200">{isTelegramMiniApp ? formatStarsPrice("fortune_master") : formatUsdPrice("fortune_master")}</div>
               <p className="text-purple-200/25 text-[10px] mt-1 mb-3">{isChinese ? "宗师级全盘深度解析" : "Master-level deep reading"}</p>
               <button
                 onClick={() => handleStripeCheckout("master")}

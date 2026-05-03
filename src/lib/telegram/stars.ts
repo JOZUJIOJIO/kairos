@@ -1,6 +1,7 @@
 import crypto from "crypto";
+import { kairosPrices, type KairosProductId } from "@/lib/pricing";
 
-export type TelegramStarsProductId = "fortune_pro" | "fortune_master" | "health_report";
+export type TelegramStarsProductId = KairosProductId;
 
 export type TelegramStarsProduct = {
   id: TelegramStarsProductId;
@@ -17,7 +18,7 @@ const PRODUCTS: Record<TelegramStarsProductId, TelegramStarsProduct> = {
     tier: "pro",
     title: "Kairós Pro Insight",
     description: "Unlock a focused AI personal insight report inside Telegram.",
-    amount: 499,
+    amount: kairosPrices.fortune_pro.stars,
     orderProduct: "telegram_stars_fortune_pro",
   },
   fortune_master: {
@@ -25,7 +26,7 @@ const PRODUCTS: Record<TelegramStarsProductId, TelegramStarsProduct> = {
     tier: "master",
     title: "Kairós Master Insight",
     description: "Unlock the full AI personal insight report with deeper planning layers.",
-    amount: 1499,
+    amount: kairosPrices.fortune_master.stars,
     orderProduct: "telegram_stars_fortune_master",
   },
   health_report: {
@@ -33,7 +34,7 @@ const PRODUCTS: Record<TelegramStarsProductId, TelegramStarsProduct> = {
     tier: "health",
     title: "Kairós Wellness Report",
     description: "Unlock a personalized wellness reflection report inside Telegram.",
-    amount: 249,
+    amount: kairosPrices.health_report.stars,
     orderProduct: "telegram_stars_health_report",
   },
 };

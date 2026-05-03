@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/supabase/auth-context";
@@ -9,6 +9,13 @@ import { createClient } from "@/lib/supabase/client";
 import { useTheme } from "@/lib/ThemeContext";
 import { themeTokens } from "@/lib/theme-tokens";
 import { PageArtworkBackdrop } from "@/components/PageArtwork";
+
+type AuthSurface = "checking" | "telegram" | "web";
+
+function safeRedirectPath(value: string | null) {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/";
+  return value;
+}
 
 export default function LoginPage() {
   return (
@@ -29,6 +36,8 @@ function LoginContent() {
   const [resetEmail, setResetEmail] = useState("");
   const [resetSent, setResetSent] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
+  const [authSurface, setAuthSurface] = useState<AuthSurface>("checking");
+  const [telegramMessage, setTelegramMessage] = useState("");
   const { signIn, signUp, signInWithGoogle } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -36,7 +45,60 @@ function LoginContent() {
   const { theme } = useTheme();
   const tk = themeTokens[theme];
 
-  const redirectTo = searchParams.get("redirect") || "/";
+  const redirectTo = safeRedirectPath(searchParams.get("redirect"));
+
+  useEffect(() => {
+    let cancelled = false;
+    let attempts = 0;
+
+    const connectTelegram = async () => {
+      const webApp = window.Telegram?.WebApp;
+      if (!webApp) {
+        if (attempts >= 8) setAuthSurface("web");
+        else {
+          attempts += 1;
+          window.setTimeout(connectTelegram, 120);
+        }
+        return;
+      }
+
+      setAuthSurface("telegram");
+      webApp.ready?.();
+      webApp.expand?.();
+
+      if (!webApp.initData) {
+        setTelegramMessage(isChinese ? "请从 Telegram 机器人重新打开 Mini App" : "Please reopen the Mini App from Telegram.");
+        return;
+      }
+
+      setTelegramMessage(isChinese ? "正在通过 Telegram 安全进入..." : "Signing in with Telegram...");
+      const startParam = webApp.initDataUnsafe?.start_param || "";
+      try {
+        const res = await fetch("/api/telegram/auth", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ initData: webApp.initData, startParam }),
+        });
+        const session = await res.json();
+        if (!res.ok || !session?.telegramUserId) {
+          throw new Error(session?.error || "Telegram auth failed");
+        }
+        localStorage.setItem("kairos_telegram_session", JSON.stringify(session));
+        window.dispatchEvent(new CustomEvent("kairos:telegram-session", { detail: session }));
+        webApp.HapticFeedback?.notificationOccurred?.("success");
+        if (!cancelled) router.replace(redirectTo);
+      } catch (err) {
+        webApp.HapticFeedback?.notificationOccurred?.("error");
+        const message = err instanceof Error ? err.message : "Telegram auth failed";
+        if (!cancelled) setTelegramMessage(message);
+      }
+    };
+
+    connectTelegram();
+    return () => {
+      cancelled = true;
+    };
+  }, [isChinese, redirectTo, router]);
 
   const handleResetPassword = async () => {
     if (!resetEmail) return;
@@ -93,6 +155,38 @@ function LoginContent() {
         </div>
 
         <div className={`${tk.card} rounded-2xl border p-6`}>
+          {authSurface === "telegram" && (
+            <div className="py-8 text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-amber-400/20 bg-amber-500/10">
+                <span className="text-2xl">✦</span>
+              </div>
+              <h2 className={`text-lg font-semibold ${tk.text1}`}>
+                {isChinese ? "Telegram 免注册进入" : "Telegram one-tap access"}
+              </h2>
+              <p className={`mt-2 text-sm ${tk.text2}`}>
+                {telegramMessage || (isChinese ? "正在连接您的 Telegram 身份..." : "Connecting your Telegram identity...")}
+              </p>
+              <button
+                type="button"
+                onClick={() => router.replace("/tg")}
+                className={`mt-6 w-full py-3 ${tk.ctaPrimary} rounded-xl font-semibold text-sm transition-colors`}
+              >
+                {isChinese ? "返回 Mini App 首页" : "Back to Mini App"}
+              </button>
+            </div>
+          )}
+
+          {authSurface === "checking" && (
+            <div className="py-8 text-center">
+              <div className="mx-auto mb-4 h-10 w-10 rounded-full border-2 border-amber-400/20 border-t-amber-400/70 animate-spin" />
+              <p className={`text-sm ${tk.text2}`}>
+                {isChinese ? "正在确认登录环境..." : "Checking sign-in environment..."}
+              </p>
+            </div>
+          )}
+
+          {authSurface === "web" && (
+          <>
           <div className={`flex mb-6 ${tk.selectBg} rounded-xl p-1`}>
             <button
               onClick={() => { setIsSignUp(false); setError(""); }}
@@ -252,6 +346,8 @@ function LoginContent() {
                 </>
               )}
             </div>
+          )}
+          </>
           )}
         </div>
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/client";
+import { kairosPrices } from "@/lib/pricing";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2026-02-25.clover" as Stripe.LatestApiVersion });
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
     line_items: [{
       price_data: {
         currency: "usd",
-        unit_amount: 490, // $4.90
+          unit_amount: kairosPrices.health_report.usdCents,
         product_data: {
           name: "TCM Health Constitution Report",
           description: "Personalized health analysis based on Five Elements & Nine Constitutions",
