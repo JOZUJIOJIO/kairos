@@ -15,15 +15,12 @@ describe("Mini App brand and entry experience", () => {
     expect(icon).toContain("bronze-mask-icon");
   });
 
-  it("turns the Telegram entry into a product home with Stars pricing", () => {
+  it("routes the legacy Telegram entry to the light Mini App SPA", () => {
     const page = readSource("src/app/tg/page.tsx");
 
-    expect(page).toContain("打开今天的节奏");
-    expect(page).toContain("守中而行");
-    expect(page).toContain("formatStarsPrice");
-    expect(page).toContain("用星星解锁更深一层");
-    expect(page).toContain("三步完成今日入场");
-    expect(page).toContain("BottomNav");
+    expect(page).toContain('redirect("/kairos-telegram-miniapp-spa.html")');
+    expect(page).not.toContain("打开今天的节奏");
+    expect(page).not.toContain("BottomNav");
     expect(page).not.toContain("Growth Preview");
     expect(page).not.toContain("Affiliate Program");
     expect(page).not.toContain("Managed Bots");
