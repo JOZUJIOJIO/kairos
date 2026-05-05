@@ -611,6 +611,27 @@ function FortuneContent() {
             </button>
 
             <Link
+              href="/fortune/ziwei"
+              className={`block w-full text-left ${tk.card} rounded-2xl p-6 transition-all duration-300 group border`}
+            >
+              <div className="flex items-start gap-4">
+                <div className="text-3xl">✦</div>
+                <div className="flex-1">
+                  <h2 className={`text-lg font-bold ${theme === "cosmic" ? "text-amber-200 group-hover:text-[#F2F0EB]" : "text-amber-700 group-hover:text-[#1a1520]"} transition-colors`}>
+                    {isChinese ? "紫微斗数命盘" : "Purple Star Map"}
+                  </h2>
+                  <p className={`${tk.text3} text-sm mt-1 leading-relaxed`}>
+                    {isChinese ? "用十二宫、命宫身宫与大限周期补全你的东方个人图谱" : "Add twelve palaces, life/body palace signals, and decadal cycles to your personal map"}
+                  </p>
+                  <div className={`flex items-center gap-2 mt-3 ${tk.accentMuted} text-xs`}>
+                    <span>Zi Wei Dou Shu 紫微</span><span>·</span><span>12 Palaces</span><span>·</span><span>AI Ziwei Insight</span>
+                  </div>
+                </div>
+                <span className={`${tk.accentMuted} text-xl transition-colors`}>→</span>
+              </div>
+            </Link>
+
+            <Link
               href="/daily"
               className={`block w-full text-left ${tk.card} rounded-2xl p-6 transition-all duration-300 group border`}
             >

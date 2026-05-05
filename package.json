@@ -14,6 +14,7 @@
     "@supabase/supabase-js": "^2.99.3",
     "@vercel/analytics": "^2.0.1",
     "html2canvas": "^1.4.1",
+    "iztro": "^2.5.8",
     "jspdf": "^4.2.1",
     "lunar-javascript": "^1.7.7",
     "next": "16.2.1",
