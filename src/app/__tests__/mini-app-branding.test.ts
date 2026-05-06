@@ -70,23 +70,29 @@ describe("Mini App brand and entry experience", () => {
     expect(daily).toContain("isTelegramMiniApp");
     expect(daily).toContain("isTelegramMiniAppRuntime");
     expect(daily).toContain("formatStarsPrice");
+    expect(daily).toContain("formatUsdPrice");
     expect(daily).toContain("Stars 解锁");
+    expect(daily).toContain("网页端解锁");
     expect(daily).toContain("handleDailyStarsUnlock");
     expect(daily).toContain("handleDailyShare");
     expect(daily).toContain('"health"');
     expect(daily).toContain("kairos_daily_paid");
   });
 
-  it("surfaces the Mini App Stars unlock path on the Fortune page", () => {
+  it("adapts Fortune unlock pricing between Mini App Stars and web USD", () => {
     const fortune = readSource("src/app/fortune/page.tsx");
     const paywall = readSource("src/components/fortune/PaywallSection.tsx");
 
+    expect(fortune).toContain("isTelegramMiniApp");
     expect(fortune).toContain("Mini App 解锁");
+    expect(fortune).toContain("网页端支付");
     expect(fortune).toContain("formatStarsPrice");
+    expect(fortune).toContain("formatUsdPrice");
     expect(fortune).toContain("fortune_pro");
     expect(fortune).toContain("本地仅预览 Stars 支付界面");
     expect(fortune).toContain("PaywallSection");
     expect(paywall).toContain("Stars 解锁完整图谱");
+    expect(paywall).toContain("formatUsdPrice");
   });
 
   it("documents the final Mini App PRD", () => {

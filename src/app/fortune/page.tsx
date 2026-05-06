@@ -24,7 +24,7 @@ import YinYangSelector from "@/components/YinYangSelector";
 import CelestialDatePicker from "@/components/CelestialDatePicker";
 import MysticalNameInput from "@/components/MysticalNameInput";
 import { generateBlueprint } from "@/lib/bazi-interpreter";
-import { formatStarsPrice } from "@/lib/pricing";
+import { formatStarsPrice, formatUsdPrice } from "@/lib/pricing";
 import { useAuth } from "@/lib/supabase/auth-context";
 import { useToast } from "@/components/Toast";
 import { ElementBar } from "@/components/fortune/ElementBar";
@@ -862,14 +862,18 @@ function FortuneContent() {
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className={`text-[10px] uppercase tracking-[0.18em] ${theme === "cosmic" ? "text-emerald-200/58" : "text-emerald-700/55"}`}>
-                      {isChinese ? "Mini App 解锁" : "Mini App unlock"}
+                      {isTelegramMiniApp
+                        ? (isChinese ? "Mini App 解锁" : "Mini App unlock")
+                        : (isChinese ? "网页端支付" : "Web checkout")}
                     </p>
                     <p className={`mt-1 text-xs leading-relaxed ${theme === "cosmic" ? "text-emerald-50/68" : "text-emerald-900/70"}`}>
-                      {isChinese ? "Telegram 内使用 Stars，支付后自动生成深度洞察。" : "Use Stars in Telegram and generate the deep insight instantly."}
+                      {isTelegramMiniApp
+                        ? (isChinese ? "Telegram 内使用 Stars，支付后自动生成深度洞察。" : "Use Stars in Telegram and generate the deep insight instantly.")
+                        : (isChinese ? "网页端使用 Stripe 美金支付，支持银行卡、Alipay、WeChat Pay。" : "Use Stripe USD checkout on the web with cards, Alipay, and WeChat Pay.")}
                     </p>
                   </div>
                   <span className={`shrink-0 rounded-xl px-3 py-2 font-data text-lg font-bold ${theme === "cosmic" ? "bg-emerald-300/[0.10] text-emerald-100" : "bg-emerald-100 text-emerald-800"}`}>
-                    {formatStarsPrice("fortune_pro")}
+                    {isTelegramMiniApp ? formatStarsPrice("fortune_pro") : formatUsdPrice("fortune_pro")}
                   </span>
                 </div>
               </div>

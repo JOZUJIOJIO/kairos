@@ -10,7 +10,7 @@ import { useAuth } from "@/lib/supabase/auth-context";
 import { isTelegramMiniAppRuntime } from "@/lib/telegram/environment";
 import { calculateBazi, STEM_ELEMENTS, getTenGod, type BaziChart } from "@/lib/bazi";
 import { ELEMENT_RECOMMENDATIONS } from "@/lib/bazi-glossary";
-import { formatStarsPrice } from "@/lib/pricing";
+import { formatStarsPrice, formatUsdPrice } from "@/lib/pricing";
 import BottomNav from "@/components/BottomNav";
 import PageHeader from "@/components/PageHeader";
 import { PageArtworkBand } from "@/components/PageArtwork";
@@ -545,7 +545,7 @@ function DailyContent() {
                       href="/fortune"
                       className="inline-flex min-h-[40px] items-center justify-center rounded-lg bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-700 px-5 text-xs font-semibold text-white"
                     >
-                      {isChinese ? "解锁 Pro · $4.99/月" : "Unlock Pro · $4.99/mo"}
+                      {isChinese ? `网页端解锁 · ${formatUsdPrice("fortune_pro")}` : `Unlock on web · ${formatUsdPrice("fortune_pro")}`}
                     </Link>
                   )}
                   {dailyCheckoutError && (
