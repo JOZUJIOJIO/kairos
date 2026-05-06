@@ -52,15 +52,16 @@ describe("Mini App brand and entry experience", () => {
     expect(layout).not.toContain("命理");
   });
 
-  it("keeps the Mini App on the high-contrast bronze theme", () => {
+  it("keeps the Web experience on the light bronze tree theme", () => {
     const home = readSource("src/app/page.tsx");
     const themeContext = readSource("src/lib/ThemeContext.tsx");
     const tokens = readSource("src/lib/theme-tokens.ts");
 
     expect(home).not.toContain("ThemeToggle");
-    expect(themeContext).toContain('value={{ theme: "cosmic", toggle }}');
-    expect(tokens).toContain('text2: "text-[#F2F0EB]/78"');
-    expect(tokens).toContain('text3: "text-[#F2F0EB]/60"');
+    expect(themeContext).toContain('value={{ theme: "cloud", toggle }}');
+    expect(themeContext).toContain('document.documentElement.style.colorScheme = "light"');
+    expect(tokens).toContain('bg: "bg-[#F5F3EE]"');
+    expect(tokens).toContain('text1: "text-[#1a1520]"');
   });
 
   it("shows Stars pricing on the Daily page inside Telegram", () => {

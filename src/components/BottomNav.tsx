@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useLocale } from "@/lib/LocaleContext";
+import { useTheme } from "@/lib/ThemeContext";
 import { isTelegramMiniAppRuntime } from "@/lib/telegram/environment";
 
 function IconHome({ className }: { className?: string }) {
@@ -70,6 +71,7 @@ const telegramNavItems = [
 export default function BottomNav() {
   const pathname = usePathname();
   const { t } = useLocale();
+  const { theme } = useTheme();
   const [isTelegramMiniApp, setIsTelegramMiniApp] = useState(false);
 
   useEffect(() => {
@@ -77,9 +79,14 @@ export default function BottomNav() {
   }, []);
 
   const activeNavItems = isTelegramMiniApp || pathname === "/tg" ? telegramNavItems : navItems;
+  const isDarkNav = theme === "cosmic" || isTelegramMiniApp || pathname === "/tg";
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-[#070511]/95 backdrop-blur-md border-t border-amber-300/18 safe-bottom shadow-[0_-18px_48px_rgba(0,0,0,0.38)]">
+    <nav className={`fixed bottom-0 left-0 right-0 z-50 lg:hidden backdrop-blur-md border-t safe-bottom ${
+      isDarkNav
+        ? "bg-[#070511]/95 border-amber-300/18 shadow-[0_-18px_48px_rgba(0,0,0,0.38)]"
+        : "bg-[#F8F5EE]/92 border-amber-800/12 shadow-[0_-18px_48px_rgba(86,62,32,0.12)]"
+    }`}>
       <div className="flex justify-around items-center h-16 max-w-md mx-auto">
         {activeNavItems.map((item) => {
           const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
@@ -88,7 +95,9 @@ export default function BottomNav() {
               key={item.href}
               href={item.href}
               className={`flex flex-col items-center justify-center gap-1 min-w-[60px] min-h-[48px] transition-colors btn-haptic ${
-                active ? "text-amber-100" : "text-[#F2F0EB]/52"
+                isDarkNav
+                  ? active ? "text-amber-100" : "text-[#F2F0EB]/52"
+                  : active ? "text-amber-800" : "text-[#1a1520]/42"
               }`}
             >
               <item.Icon />

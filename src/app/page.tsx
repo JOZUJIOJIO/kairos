@@ -117,7 +117,7 @@ export default function Home() {
         <nav className="flex items-center justify-between px-6 lg:px-12 py-4 animate-riseIn" style={{ animationDelay: "0.1s" }}>
           <Link href="/" className="flex items-center gap-2">
             <BrandMark size="sm" />
-            <span className="text-lg font-light tracking-[0.15em] text-[#F2F0EB]/86">
+            <span className={`text-lg font-light tracking-[0.15em] ${theme === "cosmic" ? "text-[#F2F0EB]/86" : "text-[#1a1520]/72"}`}>
               Kairós
             </span>
           </Link>

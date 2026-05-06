@@ -10,23 +10,23 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: "cosmic",
+  theme: "cloud",
   toggle: () => {},
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
-    localStorage.setItem("kairos-theme", "cosmic");
-    document.documentElement.dataset.kairosTheme = "cosmic";
-    document.documentElement.style.colorScheme = "dark";
+    localStorage.setItem("kairos-theme", "cloud");
+    document.documentElement.dataset.kairosTheme = "cloud";
+    document.documentElement.style.colorScheme = "light";
   }, []);
 
   const toggle = useCallback(() => {
-    localStorage.setItem("kairos-theme", "cosmic");
+    localStorage.setItem("kairos-theme", "cloud");
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme: "cosmic", toggle }}>
+    <ThemeContext.Provider value={{ theme: "cloud", toggle }}>
       {children}
     </ThemeContext.Provider>
   );
