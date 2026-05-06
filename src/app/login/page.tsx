@@ -10,6 +10,7 @@ import { useTheme } from "@/lib/ThemeContext";
 import { themeTokens } from "@/lib/theme-tokens";
 import { PageArtworkBackdrop } from "@/components/PageArtwork";
 import BrandMark from "@/components/BrandMark";
+import { isTelegramMiniAppPreviewRuntime } from "@/lib/telegram/environment";
 import { resolveTelegramRedirectPath } from "@/lib/telegram/navigation";
 
 type AuthSurface = "checking" | "telegram" | "web";
@@ -56,6 +57,15 @@ function LoginContent() {
     const connectTelegram = async () => {
       const webApp = window.Telegram?.WebApp;
       if (!webApp) {
+        if (attempts >= 8) setAuthSurface("web");
+        else {
+          attempts += 1;
+          window.setTimeout(connectTelegram, 120);
+        }
+        return;
+      }
+
+      if (!webApp.initData && !isTelegramMiniAppPreviewRuntime()) {
         if (attempts >= 8) setAuthSurface("web");
         else {
           attempts += 1;

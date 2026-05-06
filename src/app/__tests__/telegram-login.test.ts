@@ -11,6 +11,7 @@ describe("Telegram login experience", () => {
     expect(page).toContain("window.Telegram?.WebApp");
     expect(page).toContain("/api/telegram/auth");
     expect(page).toContain("authSurface === \"web\"");
+    expect(page).toContain("!webApp.initData && !isTelegramMiniAppPreviewRuntime()");
   });
 
   it("keeps Telegram login redirects on Mini App-safe routes", () => {

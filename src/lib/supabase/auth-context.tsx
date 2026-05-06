@@ -9,6 +9,7 @@ import {
   writeTelegramClientSession,
   type TelegramClientSession,
 } from "@/lib/telegram/client-session";
+import { isTelegramMiniAppPreviewRuntime } from "@/lib/telegram/environment";
 
 interface AuthContextType {
   user: User | null;
@@ -39,7 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false;
     const refreshTelegramUser = () => {
-      if (!cancelled) setTelegramUser(readTelegramClientSession());
+      const isTelegramRuntime = Boolean(window.Telegram?.WebApp?.initData) || isTelegramMiniAppPreviewRuntime();
+      if (!cancelled) setTelegramUser(isTelegramRuntime ? readTelegramClientSession() : null);
     };
     const waitForTelegramWebApp = async () => {
       for (let attempt = 0; attempt < 8; attempt += 1) {
@@ -50,13 +52,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return window.Telegram?.WebApp;
     };
     const authenticateTelegramFromWebApp = async () => {
+      const webApp = await waitForTelegramWebApp();
+      const isTelegramRuntime = Boolean(webApp?.initData) || isTelegramMiniAppPreviewRuntime();
+      if (!isTelegramRuntime) return null;
+
       const storedSession = readTelegramClientSession();
       if (storedSession) {
         if (!cancelled) setTelegramUser(storedSession);
         return storedSession;
       }
 
-      const webApp = await waitForTelegramWebApp();
       if (!webApp?.initData) return null;
 
       const startParam = webApp.initDataUnsafe?.start_param || "";

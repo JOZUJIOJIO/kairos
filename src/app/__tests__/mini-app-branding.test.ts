@@ -99,14 +99,14 @@ describe("Mini App brand and entry experience", () => {
     expect(prd).toContain("29 Stars");
   });
 
-  it("supports a localhost Mini App preview mode", () => {
+  it("keeps Mini App preview explicit so web login still works locally", () => {
     const env = readSource("src/lib/telegram/environment.ts");
     const nav = readSource("src/components/BottomNav.tsx");
 
     expect(env).toContain("isTelegramMiniAppRuntime");
     expect(env).toContain("isTelegramMiniAppPreviewRuntime");
-    expect(env).toContain("localhost");
     expect(env).toContain("tg_preview");
+    expect(env).not.toContain('window.location.hostname === "localhost"');
     expect(nav).toContain("isTelegramMiniAppRuntime");
   });
 });

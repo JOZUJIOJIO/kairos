@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { isTelegramMiniAppRuntime } from "@/lib/telegram/environment";
 
 type TelegramSession = {
   telegramUserId: number;
@@ -19,7 +20,7 @@ export default function TelegramMiniAppBridge() {
 
   useEffect(() => {
     const webApp = window.Telegram?.WebApp;
-    if (!webApp) return;
+    if (!webApp || !isTelegramMiniAppRuntime()) return;
     const isVersionAtLeast = (version: string) => webApp.isVersionAtLeast?.(version) ?? true;
 
     setIsTelegram(true);
